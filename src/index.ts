@@ -13,7 +13,7 @@ import {
   vertifyToken,
 } from './services';
 
-export const app: any = express();
+const app: any = express();
 
 const PORT = process.env.PORT || '3000';
 
@@ -67,22 +67,30 @@ app.get('/weather', vertifyToken, async (req: any, res: any, next: any) => {
   }
 });
 
+app.use((req: any, res: any) => {
+  res.status(404).send('not found');
+});
+
 app.use((error: any, req: any, res: any, next: any) => {
   const errorMessage = `Error Message: ${error.message || 'Internal server error'}`;
-  res.status(error.status || 500).send(errorMessage);
+  res.status(error.status || 500).json(errorMessage);
 });
 
 const init = async () => {
   try {
     await db.sync();
     console.log('db successfully synced');
-    app.listen(PORT, () => {
-      console.log(`Winging it up on port ${PORT}`);
-      console.log(`localhost:${PORT}`);
-    });
+    if (!module.parent) {
+      app.listen(PORT, () => {
+        console.log(`Winging it up on port ${PORT}`);
+        console.log(`localhost:${PORT}`);
+      });
+    }
   } catch (error) {
     console.error(error);
   }
 };
 
 init();
+
+export default app;
