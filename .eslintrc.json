@@ -30,7 +30,9 @@
         "import/extensions": "off",
         "max-len": "warn",
         "class-methods-use-this": "off",
-        "lines-between-class-members": "off"
+        "lines-between-class-members": "off",
+        "import/prefer-default-export": "warn",
+        "no-param-reassign": "warn"
     },
     "settings": {
         "import/resolver": {
