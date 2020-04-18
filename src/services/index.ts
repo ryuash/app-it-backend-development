@@ -1,10 +1,23 @@
-import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
-export const getWeather = async () => {
+export const generateToken = (res: any, id: number, email: string) => {
+  const token = jwt.sign({ id, email }, process.env.JWT_SECRET, {
+    expiresIn: '1d',
+  });
+
+  return token;
+};
+
+export const vertifyToken = (req: any, res: any, next: any) => {
+  const token = req.headers['x-access-token'] || req.headers.authorization || '';
   try {
-    const weather = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=hongkong&appid=${process.env.WEATHER_APP_ID}`);
-    return weather.data;
+    if (!token.length) {
+      return res.status(401).send('Unauthorized!!');
+    }
+    const [bearer, filteredToken] = token.split(' ');
+    jwt.verify(filteredToken, process.env.JWT_SECRET);
+    next();
   } catch (error) {
-    throw Error(error);
+    next(error);
   }
 };

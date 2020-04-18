@@ -32,7 +32,8 @@
         "class-methods-use-this": "off",
         "lines-between-class-members": "off",
         "import/prefer-default-export": "warn",
-        "no-param-reassign": "warn"
+        "no-param-reassign": "warn",
+        "no-useless-escape": "warn"
     },
     "settings": {
         "import/resolver": {
