@@ -5,7 +5,7 @@ import { db, Users } from '../db';
 let user: any = null;
 
 describe('User model', () => {
-  beforeEach(() => db.sync({ force: true }));
+  beforeEach(async () => await db.sync({ force: true }));
 
   after(async (done: any) => {
     db.close();

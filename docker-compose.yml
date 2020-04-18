@@ -1,9 +1,10 @@
 version: "3"
 services:
   app:
+    container_name: app-it-development
     build: .
     depends_on:
-      - postgres
+     - postgres
     ports:
       - "3000:3000"
     volumes:
@@ -11,21 +12,23 @@ services:
       - "/app/node_modules"
     env_file:
       - "./.env"
+    environment:
+      WAIT_HOSTS: postgres:5432
 
   postgres:
+    container_name: app-it-development-postgres
     image: postgres:11.2-alpine
     ports:
       - 5432:5432
     volumes:
-      - database-data:/var/lib/postgresql/data/
+      - ./src/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database-data:/var/lib/postgresql/data/
     env_file:
       - database.env
 
   adminer:
-      image: adminer
-      restart: always
-      ports:
-        - 8001:8080
-
-volumes:
-  database-data:
+    container_name: app-it-development-adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8001:8080
